@@ -1,0 +1,203 @@
+/* beyondy.ru — редизайн 2026. Тёмный кинематографичный портфолио:
+   тёплый почти-чёрный фон, кремовая типографика, один акцент — тусклый янтарь.
+   Типографика: Unbounded (дисплей) + Manrope (текст), обе с кириллицей.
+   Система радиусов: карточки и панели 6px, кнопки — пилюли.
+   Анимируются только transform и opacity; при prefers-reduced-motion всё гасится. */
+
+:root{
+  --bg:#131110;
+  --bg-2:#1a1815;
+  --bg-3:#242019;
+  --paper:#ece7da;
+  --dim:#a39d90;
+  --dim-2:#797266;
+  --amber:#d99e2f;
+  --amber-hi:#e6b054;
+  --amber-ink:#1d1507;
+  --line:rgba(236,231,218,.11);
+  --line-2:rgba(236,231,218,.25);
+  --shadow:0 22px 60px rgba(12,9,5,.6);
+  --r:6px;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;color-scheme:dark}
+body{
+  background:var(--bg);
+  color:var(--paper);
+  font-family:"Manrope",system-ui,sans-serif;
+  font-size:16px;
+  line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+}
+img{max-width:100%;display:block;height:auto}
+a{color:inherit}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+a,button{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+:focus-visible{outline:2px solid var(--amber);outline-offset:3px;border-radius:2px}
+section{scroll-margin-top:76px}
+
+.wrap{max-width:1240px;margin:0 auto;padding:0 clamp(20px,4vw,48px)}
+
+/* ---------- ссылка «перейти к содержимому» (клавиатура) ---------- */
+.skip{
+  position:fixed;left:16px;top:-60px;z-index:100;
+  padding:11px 18px;background:var(--amber);color:var(--amber-ink);
+  font-weight:700;font-size:14px;text-decoration:none;border-radius:var(--r);
+  transition:top .2s;
+}
+.skip:focus{top:12px}
+
+/* ---------- верхняя панель ---------- */
+.top{position:sticky;top:0;z-index:50;background:rgba(19,17,16,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top__bar{display:flex;align-items:center;justify-content:space-between;height:64px}
+.top__logo{display:flex;align-items:center;gap:9px;text-decoration:none;font-weight:700;font-size:18px;letter-spacing:-.01em}
+.top__bolt{color:var(--amber)}
+.top__nav{display:flex;gap:clamp(16px,3vw,32px)}
+.top__nav a{text-decoration:none;font-size:14px;color:var(--dim);transition:color .2s}
+.top__nav a:hover{color:var(--paper)}
+.top__nav a[aria-current="true"]{color:var(--amber)}
+
+/* ---------- hero ---------- */
+.hero{position:relative;overflow:hidden;border-bottom:1px solid var(--line);
+  background:
+    radial-gradient(1100px 520px at 78% 14%,rgba(217,158,47,.10),transparent 62%),
+    radial-gradient(760px 420px at 10% 92%,rgba(217,158,47,.05),transparent 58%);
+}
+.hero__in{max-width:760px;padding:clamp(64px,8vw,96px) 0 clamp(64px,9vw,120px)}
+.hero__kicker{font-size:13px;letter-spacing:.22em;text-transform:uppercase;color:var(--amber);margin-bottom:22px}
+.hero__title{font-family:"Unbounded",sans-serif;font-weight:500;font-size:clamp(44px,9vw,116px);line-height:1.06;letter-spacing:-.015em}
+.hero__lead{max-width:46ch;margin-top:28px;color:var(--dim);font-size:17px}
+.hero__cta{
+  display:inline-block;margin-top:34px;padding:14px 32px;
+  background:var(--amber);color:var(--amber-ink);
+  font-weight:700;font-size:15px;text-decoration:none;border-radius:999px;
+  transition:background-color .2s,transform .15s;
+}
+.hero__cta:hover{background:var(--amber-hi)}
+.hero__cta:active{transform:translateY(1px) scale(.98)}
+/* молния: левый край = текстовый блок (760px) + отступ 250px
+   (100px исходного зазора + 150px сдвига вправо);
+   на узких экранах не помещается — уходит к правому краю и уменьшается */
+.hero__bolt{position:absolute;left:calc(clamp(20px,4vw,48px) + 1010px);top:clamp(48px,7vw,84px);color:var(--amber);opacity:.15;transform:rotate(8deg)}
+.hero__bolt svg{width:min(315px,34vw);height:auto}
+.hero__noise{position:absolute;inset:0;pointer-events:none;opacity:.05;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* ---------- бегущая строка направлений ---------- */
+.strip{overflow:hidden;border-bottom:1px solid var(--line);padding:22px 0}
+.strip__track{display:flex;width:max-content}
+.strip__g{display:flex;align-items:center}
+.strip__i{font-family:"Unbounded",sans-serif;font-weight:400;font-size:clamp(17px,2.4vw,27px);white-space:nowrap;color:var(--dim-2)}
+.strip__i::after{content:"/";color:var(--amber);opacity:.5;margin:0 34px}
+
+/* ---------- работы ---------- */
+.works{padding:clamp(64px,9vw,110px) 0 28px}
+.works__head{display:flex;flex-direction:column;align-items:stretch;gap:22px;margin-bottom:40px}
+.works__h{font-family:"Unbounded",sans-serif;font-weight:500;font-size:clamp(24px,3.4vw,38px);line-height:1.15;letter-spacing:-.01em}
+/* облако тегов — отдельной строкой на всю ширину контента сайта */
+.chips{display:flex;flex-wrap:wrap;gap:8px;max-width:none}
+.chip{padding:7px 15px;border:1px solid var(--line-2);border-radius:999px;font-size:13.5px;color:var(--dim);transition:color .2s,border-color .2s,background-color .2s}
+.chip:hover{color:var(--paper);border-color:var(--dim)}
+.chip.is-on{background:var(--amber);border-color:var(--amber);color:var(--amber-ink);font-weight:700}
+
+.grid{columns:4 230px;column-gap:26px}
+.card{break-inside:avoid;margin-bottom:30px}
+.card__media{display:block;width:100%;padding:0;border-radius:var(--r);overflow:hidden;background:var(--bg-3);position:relative}
+.card__media img{width:100%;transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+.card__media::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(10,8,5,.72));opacity:0;transition:opacity .3s}
+.card__media:hover::after{opacity:1}
+.card__media:hover img{transform:scale(1.04)}
+.card__meta{padding:12px 2px 0}
+.card__title{font-weight:700;font-size:15.5px;transition:color .2s}
+.card:hover .card__title{color:var(--amber-hi)}
+.card__tags{font-size:12px;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card.is-hidden{display:none}
+.grid__empty{color:var(--dim);padding:24px 0 60px}
+
+/* ---------- обо мне ---------- */
+.about{margin-top:clamp(56px,8vw,96px);background:var(--bg-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:clamp(64px,9vw,104px) 0}
+.about__in{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.7fr);gap:32px clamp(32px,5vw,72px);align-items:start}
+.about__h{font-family:"Unbounded",sans-serif;font-weight:500;font-size:clamp(24px,3.4vw,38px);letter-spacing:-.01em}
+.about__body{max-width:62ch;color:var(--dim)}
+
+/* ---------- контакты ---------- */
+.contact{padding:clamp(72px,10vw,128px) 0;text-align:center}
+.contact__h{font-size:13px;letter-spacing:.22em;text-transform:uppercase;color:var(--amber);margin-bottom:20px}
+.contact__mail{display:inline-block;font-weight:700;font-size:clamp(26px,5vw,54px);letter-spacing:-.01em;text-decoration:none;transition:color .2s}
+.contact__mail:hover{color:var(--amber-hi)}
+.contact__sub{margin-top:16px;color:var(--dim)}
+
+/* ---------- футер ---------- */
+.foot{border-top:1px solid var(--line);padding:26px 0 34px}
+.foot__in{display:flex;flex-wrap:wrap;gap:8px 18px;justify-content:center;font-size:13px;color:var(--dim)}
+.foot__note{color:var(--dim-2)}
+
+/* ---------- лайтбокс (нативный <dialog>) ---------- */
+/* лайтбокс — всегда во весь экран: шапка сверху, картинка по центру,
+   внизу стрелки с полосой миниатюр между ними.
+   display — только на [open]: иначе перебьём браузерный display:none
+   и закрытый диалог «повиснет» под подвалом видимой копией */
+.lb{width:100vw;max-width:100vw;height:100dvh;max-height:100dvh;border:0;border-radius:0;padding:0;background:var(--bg);color:var(--paper);box-shadow:none}
+.lb[open]{display:flex;flex-direction:column}
+.lb::backdrop{background:rgba(8,6,4,.9);backdrop-filter:blur(4px)}
+.lb__bar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 20px;border-bottom:1px solid var(--line);flex:0 0 auto}
+.lb__title{font-weight:700;font-size:17px}
+.lb__tools{display:flex;align-items:center;gap:14px}
+.lb__count{font-size:13px;color:var(--dim);font-variant-numeric:tabular-nums}
+.lb__close{font-size:15px;padding:6px 10px;border:1px solid var(--line-2);border-radius:var(--r);transition:color .2s,border-color .2s}
+.lb__close:hover{color:var(--amber-hi);border-color:var(--amber)}
+.lb__scroll{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;align-items:center;overflow:hidden;padding:16px 20px 14px;overscroll-behavior:contain}
+.lb__fig{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0;max-width:min(1160px,100%)}
+.lb__fig img{border-radius:var(--r);max-height:100%;width:auto;object-fit:contain}
+.lb__cap{margin-top:10px;font-size:13.5px;color:var(--dim);text-align:center;flex:0 0 auto}
+.lb__nav{flex:0 0 auto;align-self:stretch;display:flex;align-items:center;justify-content:center;gap:14px;margin-top:12px;max-width:100%;padding:0 20px}
+.lb__nav[hidden]{display:none}
+.lb__btn{padding:9px 20px;border:1px solid var(--line-2);border-radius:999px;transition:color .2s,border-color .2s,transform .15s;flex:0 0 auto}
+.lb__btn:hover{color:var(--amber-hi);border-color:var(--amber)}
+.lb__btn:active{transform:scale(.96)}
+.lb__btn[disabled]{opacity:.35;pointer-events:none}
+/* полоса миниатюр: ширина по содержимому, группа «стрелки+миниатюры»
+   центрируется целиком; при нехватке места полоса сжимается и скроллится */
+.lb__thumbs{display:flex;gap:8px;align-items:center;justify-content:flex-start;overflow-x:auto;overscroll-behavior-x:contain;padding:4px;min-width:0;flex:0 1 auto;max-width:100%;scrollbar-width:thin;scrollbar-color:var(--line-2) transparent}
+.lb__thumb{flex:0 0 auto;padding:0;border:1px solid var(--line-2);border-radius:var(--r);opacity:.5;line-height:0;transition:opacity .2s,border-color .2s}
+.lb__thumb img{height:56px;width:auto;border-radius:calc(var(--r) - 2px)}
+.lb__thumb:hover{opacity:.9}
+.lb__thumb.is-cur{opacity:1;border-color:var(--amber)}
+
+/* ---------- анимация ----------
+   Секвенция hero — при загрузке; бегущая строка — бесшовный цикл
+   (две одинаковые группы в треке, сдвиг ровно на половину ширины). */
+@media (prefers-reduced-motion: no-preference){
+  .hero__kicker,.hero__title,.hero__lead,.hero__cta{
+    opacity:0;animation:hero-in .7s cubic-bezier(.2,.7,.2,1) forwards;
+  }
+  .hero__title{animation-delay:.07s}
+  .hero__lead{animation-delay:.14s}
+  .hero__cta{animation-delay:.21s}
+  .strip__track{animation:strip 38s linear infinite}
+}
+@keyframes hero-in{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+@keyframes strip{to{transform:translateX(-50%)}}
+
+/* появление карточек и заголовков при прокрутке:
+   скрываются только когда JS точно работает (класс js на <html>) */
+html.js .reveal{opacity:0;transform:translateY(20px);transition:opacity .55s cubic-bezier(.2,.7,.2,1),transform .55s cubic-bezier(.2,.7,.2,1)}
+html.js .reveal.in{opacity:1;transform:none}
+
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  html.js .reveal{opacity:1;transform:none;transition:none}
+  .hero__kicker,.hero__title,.hero__lead,.hero__cta{opacity:1;animation:none}
+  .strip__track{animation:none}
+  .card__media img,.card__media::after{transition:none}
+}
+
+/* ---------- мобильная версия ---------- */
+@media (max-width:1380px){
+  .hero__bolt{left:auto;right:clamp(6px,8vw,140px)}
+}
+@media (max-width:640px){
+  .top__nav{gap:14px;font-size:13px}
+  .about__in{grid-template-columns:minmax(0,1fr)}
+  .foot__in{flex-direction:column;align-items:center;gap:2px}
+}
